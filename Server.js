@@ -1,7 +1,11 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
+const bcrypt = require("bcrypt-nodejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(cors());
+
 const dataBase = {
   users: [
     {
@@ -21,12 +25,19 @@ const dataBase = {
       joined: new Date(),
     },
     {
-      id: 125,
+      id: "125",
       name: "Anees",
       email: "Anees@gmail.com",
       password: "bistics",
       entries: 0,
       joined: new Date(),
+    },
+  ],
+  login: [
+    {
+      id: "897",
+      hash: "",
+      email: "jhon@gmail.com",
     },
   ],
 };
@@ -59,6 +70,10 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
+  bcrypt.hash(password, null, null, function (err, hash) {
+    console.log(hash);
+  });
+
   dataBase.users.push({
     id: 126,
     name: name,
@@ -85,6 +100,14 @@ app.put("/image", (req, res) => {
 app.listen(3001, () => {
   console.log("This is working on Server 3001");
 });
+
+// Load hash from your password DB.
+// bcrypt.compare("bacon", hash, function(err, res) {
+//   // res == true
+// });
+// bcrypt.compare("veggies", hash, function(err, res) {
+//   // res = false
+// });
 
 // / --> this is working
 // /signin  post --> res= sucess/failure
