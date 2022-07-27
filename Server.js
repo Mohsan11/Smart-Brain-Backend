@@ -64,7 +64,7 @@ app.post("/signin", (req, res) => {
   ) {
     res.json("success");
   } else {
-    res.status(400).json("Invalid user");
+    res.status(400).json("Error loging in");
   }
 });
 
@@ -78,7 +78,6 @@ app.post("/register", (req, res) => {
     id: 126,
     name: name,
     email: email,
-    password: password,
     entries: 0,
     joined: new Date(),
   });
