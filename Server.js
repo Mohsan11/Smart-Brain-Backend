@@ -44,24 +44,13 @@ const dataBase = {
 app.get("/", (req, res) => {
   res.send(dataBase.users);
 });
-app.get("/profile/:id", (req, res) => {
-  const { id } = req.params;
-  let found = false;
-  dataBase.users.forEach((user) => {
-    if (user.id === id) {
-      return res.json(user);
-      found = true;
-    }
-  });
-  if (!found) {
-    res.status(404).json("not found.");
-  }
-});
+
 app.post("/signin", (req, res) => {
   if (
     req.body.email === dataBase.users[0].email &&
     req.body.password === dataBase.users[0].password
   ) {
+    res.json(dataBase.users[0]);
     res.json("success");
   } else {
     res.status(400).json("Error loging in");
@@ -83,11 +72,25 @@ app.post("/register", (req, res) => {
   });
   res.json(dataBase.users[dataBase.users.length - 1]);
 });
+app.get("/profile/:id", (req, res) => {
+  const { id } = req.params;
+  let found = false;
+  dataBase.users.forEach((user) => {
+    if (user.id === id) {
+      return res.json(user);
+      found = true;
+    }
+  });
+  if (!found) {
+    res.status(404).json("not found.");
+  }
+});
 app.put("/image", (req, res) => {
   const { id } = req.body;
   let found = false;
   dataBase.users.forEach((user) => {
-    if ((user.id = id)) {
+    if (user.id === id) {
+      found = true;
       user.entries++;
       return res.json(user.entries);
     }
@@ -96,6 +99,7 @@ app.put("/image", (req, res) => {
     res.status(404).json("user not found.");
   }
 });
+
 app.listen(3001, () => {
   console.log("This is working on Server 3001");
 });
