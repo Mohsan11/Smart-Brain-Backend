@@ -28,41 +28,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
-const dataBase = {
-  users: [
-    {
-      id: "123",
-      name: "Mohsan",
-      email: "mohsanali@gmail.com",
-      password: "cookies",
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: "124",
-      name: "Ahsan",
-      email: "Ahsanali@gmail.com",
-      password: "biscuits",
-      entries: 0,
-      joined: new Date(),
-    },
-    {
-      id: "125",
-      name: "Anees",
-      email: "Anees@gmail.com",
-      password: "bistics",
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-  login: [
-    {
-      id: "897",
-      hash: "",
-      email: "jhon@gmail.com",
-    },
-  ],
-};
 app.get("/", (req, res) => {
   res.send(dataBase.users);
 });
