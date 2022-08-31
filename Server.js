@@ -1,7 +1,29 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const bcrypt = require("bcrypt-nodejs");
+//const bcrypt = require("bcrypt-nodejs");
+const knex = require("knex");
+const { response, json } = require("express");
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    port: 5432,
+    user: "postgres",
+    password: "1234",
+    database: "smartbraindb",
+  },
+});
+
+// db.select("*")
+//   .from("users")
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((err) => {
+//     console.log(err);
+//   });
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
@@ -59,31 +81,36 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
-  bcrypt.hash(password, null, null, function (err, hash) {
-    console.log(hash);
-  });
+  // bcrypt.hash(password, null, null, function (err, hash) {
+  //   console.log(hash);
+  // });
 
-  dataBase.users.push({
-    id: 126,
-    name: name,
-    email: email,
-    entries: 0,
-    joined: new Date(),
-  });
-  res.json(dataBase.users[dataBase.users.length - 1]);
+  db("users")
+    .returning("*")
+    .insert({
+      email: email,
+      name: name,
+      joined: new Date(),
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => res.status(400).json("unable to regster."));
 });
+
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  let found = false;
-  dataBase.users.forEach((user) => {
-    if (user.id === id) {
-      return res.json(user);
-      found = true;
-    }
-  });
-  if (!found) {
-    res.status(404).json("not found.");
-  }
+  db.select("*")
+    .from("users")
+    .where({ id })
+    .then((user) => {
+      if (user.lenght) {
+        res, json(user[0]);
+      } else {
+        res.status(400).json("not found!");
+      }
+    })
+    .catch((err) => res.status(400).json("error getting user"));
 });
 app.put("/image", (req, res) => {
   const { id } = req.body;
