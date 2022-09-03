@@ -31,6 +31,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 
+app.get("/", (req, res) => {
+  res.send("This is working.");
+});
 app.post("/signin", (req, res) => {
   Signin.handleSignin(req, res, db, bcrypt);
 });
