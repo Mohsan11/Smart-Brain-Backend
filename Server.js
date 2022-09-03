@@ -46,8 +46,8 @@ app.put("/image", (req, res) => {
   image.imageHandle(req, res, db);
 });
 
-app.listen(3001, () => {
-  console.log("This is working on Server 3001");
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`This is working on Server ${process.env.PORT}`);
 });
 
 // Load hash from your password DB.
