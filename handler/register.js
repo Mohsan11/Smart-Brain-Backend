@@ -27,7 +27,7 @@ const handleRegister = (req, res, db, bcrypt) => {
       })
       .then(trx.commit)
       .catch(trx.rollback);
-  }).catch((err) => res.tatus(400).json("can not submit form register"));
+  }).catch((err) => res.tatus(400).json("unable to register"));
 };
 module.exports = {
   handleRegister: handleRegister,
